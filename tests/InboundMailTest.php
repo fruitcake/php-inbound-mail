@@ -52,7 +52,7 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
     public function testReplyWithRe()
     {
         $message = (new \Swift_Message('Re: Testmail'));
-        
+
         $inboundMail = new InboundMail();
 
         $reply = $inboundMail->createSwiftReply($message);

@@ -8,6 +8,27 @@ use Swift_Message;
 
 class InboundMail
 {
+    public function getVisibleText(Swift_Message $message) : string
+    {
+        $body = null;
+        if ($message->getBody() && $message->getBodyContentType() === 'text/plain') {
+            $body = $message->getBody();
+        } else {
+            foreach ($message->getChildren() as $child) {
+                if ($child->getBodyContentType() === 'text/plain') {
+                    $body = $child->getBody();
+                }
+            }
+        }
+
+        if (is_null($body)) {
+            throw new \RuntimeException('No text body is found');
+        }
+
+        return \EmailReplyParser\EmailReplyParser::parseReply($body);
+    }
+
+
     public function createSwiftReply(Swift_Message $originalMessage, $includeCc = true) : Swift_Message
     {
         // Prepend the subject with 'Re: ' if not already present
