@@ -15,7 +15,7 @@ class TestParser extends AbstractParser
     protected $to;
     protected $headers;
 
-    protected $idHeaders = ['Message-ID', 'In-Reply-To', 'References'];
+    protected $idHeaders = ['In-Reply-To', 'References'];
 
     public function __construct(
         string $subject,
@@ -45,7 +45,9 @@ class TestParser extends AbstractParser
         }
 
         foreach ($this->headers as $name => $value) {
-            if (in_array($name, $this->idHeaders)) {
+            if ($name === 'Message-ID') {
+                $message->setId($value);
+            } elseif (in_array($name, $this->idHeaders)) {
                 $message->getHeaders()->addIdHeader($name, $this->parseIdHeader($value));
             } else {
                 $message->getHeaders()->addTextHeader($name, $value);
