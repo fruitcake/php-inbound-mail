@@ -1,0 +1,51 @@
+{
+    "name": "fruitcake/inbound-mail",
+    "description": "PHP Inbound Mail parser",
+    "keywords": [
+        "mail",
+        "email",
+        "inbound",
+        "sendgrid",
+        "postmark",
+        "gmail"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Barry vd. Heuvel",
+            "email": "barry@fruitcake.nl"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "swiftmailer/swiftmailer": "^6.1",
+        "willdurand/email-reply-parser": "^2.8"
+    },
+    "require-dev": {
+        "google/apiclient": "^2.2",
+        "phpunit/phpunit": "^7",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fruitcake\\InboundMail\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fruitcake\\InboundMail\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check-style": "phpcs src tests",
+        "fix-style": "phpcbf src tests"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
