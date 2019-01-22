@@ -3,7 +3,7 @@
 ## Parsers and utilities to process inbound mail
 
 ## Providers
- - [ ] Gmail (Google API)
+ - [x] Gmail (Google API)
  - [ ] Postmark Inbound
  - [ ] Sendgrid Inbound Parse
  - [ ] IMAP / RAW emails
