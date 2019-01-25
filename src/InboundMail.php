@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fruitcake\InboundMail;
 
+use Fruitcake\InboundMail\Parser\GmailParser;
+use Fruitcake\InboundMail\Parser\MimeParser;
 use Swift_Message;
 
 class InboundMail
@@ -14,6 +16,21 @@ class InboundMail
     public function __construct(Swift_Message $message)
     {
         $this->message = $message;
+    }
+
+    public static function parse($message) : self
+    {
+        if ($message instanceof Swift_Message) {
+            return new static($message);
+        }
+
+        if ($message instanceof \Google_Service_Gmail_Message) {
+            $parser = new GmailParser($message);
+        } else {
+            $parser = new MimeParser((string) $message);
+        }
+
+        return new static($parser->getSwiftMessage());
     }
 
     public function getMessage() : Swift_Message
@@ -63,7 +80,7 @@ class InboundMail
     }
 
 
-    public function createSwiftReply($includeCc = true) : Swift_Message
+    public function createReply($includeCc = true) : Swift_Message
     {
         $originalMessage = $this->getMessage();
 

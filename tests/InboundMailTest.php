@@ -19,7 +19,7 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
 
         $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply();
+        $reply = $inboundMail->createReply();
 
         $this->assertInstanceOf(\Swift_Message::class, $reply);
         $this->assertEquals('Re: Testmail', $reply->getSubject());
@@ -40,7 +40,7 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
 
         $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply();
+        $reply = $inboundMail->createReply();
 
         $this->assertEquals(['1@foo', '2@foo'], $reply->getHeaders()->get('References')->getFieldBodyModel());
     }
@@ -55,8 +55,24 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
 
         $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply();
+        $reply = $inboundMail->createReply();
 
         $this->assertEquals('Re: Testmail', $reply->getSubject());
+    }
+
+    /**
+     * Test our example Parser, to check the Abstract Parser methods
+     */
+    public function testParse()
+    {
+        $original = (new \Swift_Message('Testmail'))->toString();
+
+        $inboundMail = InboundMail::parse($original);
+
+        $message = $inboundMail->getMessage();
+
+        $this->assertInstanceOf(\Swift_Message::class, $inboundMail->getMessage());
+
+        $this->assertEquals('Testmail', $message->getSubject());
     }
 }

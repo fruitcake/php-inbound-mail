@@ -19,41 +19,41 @@ abstract class AbstractParser
             $swiftMessage->setId($this->parseIdHeader($headers['message-id']));
         }
 
-        if (isset($headers['subject'])) {
+        if (isset($headers['subject']) && $headers['subject']) {
             $swiftMessage->setSubject($headers['subject']);
         }
 
-        if (isset($headers['date'])) {
+        if (isset($headers['date']) && $headers['date']) {
             $swiftMessage->setDate(new \DateTime($headers['date']));
         }
 
-        if (isset($headers['from'])) {
+        if (isset($headers['from']) && $headers['from']) {
             $swiftMessage->setFrom($this->parseMailboxHeader($headers['from']));
         }
 
-        if (isset($headers['to'])) {
+        if (isset($headers['to'])  && $headers['to']) {
             $swiftMessage->setTo($this->parseMailboxHeader($headers['to']));
         }
 
-        if (isset($headers['cc'])) {
+        if (isset($headers['cc']) && $headers['cc']) {
             $swiftMessage->setTo($this->parseMailboxHeader($headers['cc']));
         }
 
-        if (isset($headers['reply-to'])) {
+        if (isset($headers['reply-to']) && $headers['reply-to']) {
             $swiftMessage->setReplyTo($this->parseMailboxHeader($headers['reply-to']));
         }
 
         $swiftHeaders = $swiftMessage->getHeaders();
 
-        if (isset($headers['delivered-to'])) {
+        if (isset($headers['delivered-to']) && $headers['delivered-to']) {
             $swiftHeaders->addMailboxHeader('Delivered-To', $this->parseMailboxHeader($headers['delivered-to']));
         }
 
-        if (isset($headers['references'])) {
+        if (isset($headers['references']) && $headers['references']) {
             $swiftHeaders->addIdHeader('References', $this->parseIdHeader($headers['references']));
         }
 
-        if (isset($headers['in-reply-to'])) {
+        if (isset($headers['in-reply-to']) && $headers['in-reply-to']) {
             $swiftHeaders->addIdHeader('In-Reply-To', $this->parseIdHeader($headers['in-reply-to']));
         }
 

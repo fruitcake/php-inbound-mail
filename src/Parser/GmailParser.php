@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fruitcake\InboundMail\Parser;
 
-use DateTime;
 use Google_Service_Gmail_Message;
 use Swift_Message;
 
