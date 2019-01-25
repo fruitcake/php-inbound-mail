@@ -13,9 +13,9 @@ class VisibleTextTest extends \PHPUnit\Framework\TestCase
     {
         $message = (new \Swift_Message())->setBody(file_get_contents(__DIR__ .'/fixtures/email_3.txt'));
 
-        $inboundMail = new InboundMail();
+        $inboundMail = new InboundMail($message);
 
-        $replyText = $inboundMail->getVisibleText($message);
+        $replyText = $inboundMail->getVisibleText();
 
         $this->assertEquals('Oh thanks.
 

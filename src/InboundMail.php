@@ -8,29 +8,65 @@ use Swift_Message;
 
 class InboundMail
 {
-    public function getVisibleText(Swift_Message $message) : string
+    /** @var Swift_Message */
+    protected $message;
+
+    public function __construct(Swift_Message $message)
     {
-        $body = null;
+        $this->message = $message;
+    }
+
+    public function getMessage() : Swift_Message
+    {
+        return $this->message;
+    }
+
+    public function getText() : ?string
+    {
+        $message = $this->getMessage();
+
         if ($message->getBody() && $message->getBodyContentType() === 'text/plain') {
-            $body = $message->getBody();
+            return $message->getBody();
         } else {
             foreach ($message->getChildren() as $child) {
                 if ($child->getBodyContentType() === 'text/plain') {
-                    $body = $child->getBody();
+                    return $child->getBody();
                 }
             }
         }
+    }
 
-        if (is_null($body)) {
+    public function getHtml() : ?string
+    {
+        $message = $this->getMessage();
+
+        if ($message->getBody() && $message->getBodyContentType() === 'text/html') {
+            return $message->getBody();
+        } else {
+            foreach ($message->getChildren() as $child) {
+                if ($child->getBodyContentType() === 'text/html') {
+                    return $child->getBody();
+                }
+            }
+        }
+    }
+
+    public function getVisibleText() : string
+    {
+        $text = $this->getText();
+
+        if (empty($text)) {
             throw new \RuntimeException('No text body is found');
         }
 
-        return \EmailReplyParser\EmailReplyParser::parseReply($body);
+        return \EmailReplyParser\EmailReplyParser::parseReply($text);
     }
 
 
-    public function createSwiftReply(Swift_Message $originalMessage, $includeCc = true) : Swift_Message
+    public function createSwiftReply($includeCc = true) : Swift_Message
     {
+        $originalMessage = $this->getMessage();
+
         // Prepend the subject with 'Re: ' if not already present
         $subject = $originalMessage->getSubject();
         if (substr($subject, 0, 3) !== 'Re:') {

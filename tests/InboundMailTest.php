@@ -17,9 +17,9 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
             ->setFrom('barry@fruitcake.nl')
             ->setCc('info@fruitcake.nl');
 
-        $inboundMail = new InboundMail();
+        $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply($message);
+        $reply = $inboundMail->createSwiftReply();
 
         $this->assertInstanceOf(\Swift_Message::class, $reply);
         $this->assertEquals('Re: Testmail', $reply->getSubject());
@@ -38,9 +38,9 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
         $message->setId('2@foo');
         $message->getHeaders()->addIdHeader('References', '1@foo');
 
-        $inboundMail = new InboundMail();
+        $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply($message);
+        $reply = $inboundMail->createSwiftReply();
 
         $this->assertEquals(['1@foo', '2@foo'], $reply->getHeaders()->get('References')->getFieldBodyModel());
     }
@@ -53,9 +53,9 @@ class InboundMailTest extends \PHPUnit\Framework\TestCase
     {
         $message = (new \Swift_Message('Re: Testmail'));
 
-        $inboundMail = new InboundMail();
+        $inboundMail = new InboundMail($message);
 
-        $reply = $inboundMail->createSwiftReply($message);
+        $reply = $inboundMail->createSwiftReply();
 
         $this->assertEquals('Re: Testmail', $reply->getSubject());
     }
