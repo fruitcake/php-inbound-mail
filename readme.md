@@ -6,5 +6,5 @@
  - [x] Gmail (Google API)
  - [ ] Postmark Inbound
  - [ ] Sendgrid Inbound Parse
- - [ ] IMAP / RAW emails
+ - [x] IMAP / RAW emails
  

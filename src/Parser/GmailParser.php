@@ -23,56 +23,18 @@ class GmailParser extends AbstractParser
         $payload = $this->gmailMessage->getPayload();
 
         $swiftMessage = new Swift_Message();
-        $swiftHeaders = $swiftMessage->getHeaders();
 
         $headers = [];
         /** @var \Google_Service_Gmail_MessagePartHeader $header */
         foreach ($payload->getHeaders() as $header) {
-            $headers[strtolower($header->getName())] = $header->getValue();
+            $headers[$header->getName()] = $header->getValue();
         }
 
-        if (isset($headers['message-id'])) {
-            $swiftMessage->setId($this->parseIdHeader($headers['message-id']));
-        }
-
-        if (isset($headers['subject'])) {
-            $swiftMessage->setSubject($headers['subject']);
-        }
-
-        if (isset($headers['date'])) {
-            $swiftMessage->setDate(new DateTime($headers['date']));
-        }
-
-        if (isset($headers['from'])) {
-            $swiftMessage->setFrom($this->parseMailboxHeader($headers['from']));
-        }
-
-        if (isset($headers['to'])) {
-            $swiftMessage->setTo($this->parseMailboxHeader($headers['to']));
-        }
-
-        if (isset($headers['cc'])) {
-            $swiftMessage->setTo($this->parseMailboxHeader($headers['cc']));
-        }
-
-        if (isset($headers['reply-to'])) {
-            $swiftMessage->setReplyTo($this->parseMailboxHeader($headers['reply-to']));
-        }
-
-        if (isset($headers['delivered-to'])) {
-            $swiftHeaders->addMailboxHeader('Delivered-To', $this->parseMailboxHeader($headers['delivered-to']));
-        }
-
-        if (isset($headers['references'])) {
-            $swiftHeaders->addIdHeader('References', $this->parseIdHeader($headers['references']));
-        }
-
-        if (isset($headers['in-reply-to'])) {
-            $swiftHeaders->addIdHeader('In-Reply-To', $this->parseIdHeader($headers['in-reply-to']));
-        }
+        $swiftMessage = $this->fillFromHeaders($swiftMessage, $headers);
 
         if ($this->gmailMessage->getThreadId()) {
-            $swiftHeaders->addTextHeader('X-Gmail-Thread-Id', $this->gmailMessage->getThreadId());
+            $swiftMessage->getHeaders()
+                ->addTextHeader('X-Gmail-Thread-Id', $this->gmailMessage->getThreadId());
         }
 
         /** @var \Google_Service_Gmail_MessagePart $part */

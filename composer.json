@@ -19,7 +19,8 @@
     "require": {
         "php": "^7.1",
         "swiftmailer/swiftmailer": "^6.1",
-        "willdurand/email-reply-parser": "^2.8"
+        "willdurand/email-reply-parser": "^2.8",
+        "zbateson/mail-mime-parser": "^1.1"
     },
     "require-dev": {
         "google/apiclient": "^2.2",
